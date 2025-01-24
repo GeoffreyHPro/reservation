@@ -8,6 +8,7 @@ import com.example.demo.exception.NotFoundException;
 import com.example.demo.model.Country;
 import com.example.demo.repository.CountryRepository;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -31,5 +32,9 @@ public class CountryService {
                     return Mono.error(new AlreadyCreatedException());
                 })
                 .switchIfEmpty(countryRepository.save(new Country(countryName)));
+    }
+
+    public Flux<Country> getAllCountries() {
+        return countryRepository.findAll();
     }
 }

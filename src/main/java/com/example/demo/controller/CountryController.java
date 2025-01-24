@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -46,7 +47,16 @@ public class CountryController {
     })
     public Mono<ResponseEntity<Object>> addCountry(@RequestBody CountryRequest countryRequest) {
         return this.countryService.addCountry(countryRequest.getCountryName())
-                .map(country -> ResponseEntity.status(200).body(country))
+                .map(country -> ResponseEntity.status(201).body(country))
                 .onErrorResume(AlreadyCreatedException.class, e -> Mono.just(ResponseEntity.status(400).build()));
+    }
+
+    @GetMapping()
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "The countries are successfully get", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Country.class)))
+    })
+    public Flux<Country> getAllCountries() {
+        return this.countryService.getAllCountries()
+                .map(listCountries -> listCountries);
     }
 }
