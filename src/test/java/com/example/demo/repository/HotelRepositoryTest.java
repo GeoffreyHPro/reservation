@@ -32,9 +32,23 @@ public class HotelRepositoryTest {
     @BeforeEach
     public void setUp() {
         this.country = new Country("France");
-        this.countryRepository.save(country);
-        this.city = new City("Lille", country.getId());
-        this.cityRepository.save(city);
+        StepVerifier.create(countryRepository.save(country))
+                .assertNext(savedCountry -> {
+                    this.country.setId(savedCountry.getId());
+                    assertEquals("France", savedCountry.getCountryName());
+                })
+                .verifyComplete();
+
+        this.city = new City("Lille", this.country.getId());
+
+        Mono<City> citySaved = cityRepository.save(city);
+
+        StepVerifier.create(citySaved)
+                .assertNext(saved -> {
+                    assertEquals("Lille", saved.getCityName());
+                    assertEquals(this.country.getId(), saved.getCountryId());
+                }).verifyComplete();
+
     }
 
     @Test

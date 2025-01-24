@@ -20,6 +20,10 @@ public class Country {
         this.countryName = countryName;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getCountryName() {
         return countryName;
     }

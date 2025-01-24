@@ -1,11 +1,15 @@
 package com.example.demo.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.example.demo.model.City;
 import com.example.demo.model.Country;
@@ -27,7 +31,12 @@ public class CityRepositoryTest {
     @BeforeEach
     public void setUp() {
         this.country = new Country("France");
-        this.countryRepository.save(country);
+        StepVerifier.create(countryRepository.save(country))
+                .assertNext(savedCountry -> {
+                    this.country.setId(savedCountry.getId());
+                    assertEquals("France", savedCountry.getCountryName());
+                })
+                .verifyComplete();
     }
 
     @Test
@@ -39,6 +48,7 @@ public class CityRepositoryTest {
         StepVerifier.create(citySaved)
                 .assertNext(saved -> {
                     assertEquals("Lille", saved.getCityName());
+                    assertEquals(this.country.getId(), saved.getCountryId());
                 }).verifyComplete();
 
         Mono<City> cityFound = cityRepository.findById(city.getId());
@@ -48,6 +58,5 @@ public class CityRepositoryTest {
                     assertEquals(city.getCityName(), found.getCityName());
                     assertEquals(city.getCountryId(), found.getCountryId());
                 }).verifyComplete();
-
     }
 }
