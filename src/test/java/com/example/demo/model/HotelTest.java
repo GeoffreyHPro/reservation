@@ -19,15 +19,15 @@ public class HotelTest {
     @Test
     public void testHotelConstructor() {
         assertEquals("Barriere", this.hotelConstructor.getHotelName());
-        assertEquals(10, this.hotelConstructor.getCountryId());
+        assertEquals(10, this.hotelConstructor.getCityId());
     }
 
     @Test
     public void testCountryParameters() {
         this.hotel.setHotelName("Barriere");
         assertEquals("Barriere", this.hotel.getHotelName());
-        this.hotel.setCountryId(1);
-        assertEquals(1, this.hotel.getCountryId());
+        this.hotel.setCityId(1);
+        assertEquals(1, this.hotel.getCityId());
     }
     
 }
