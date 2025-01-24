@@ -15,6 +15,11 @@ public class City {
     @Column("countryId")
     private int countryId;
 
+    public City(String cityName, int countryId) {
+        this.cityName = cityName;
+        this.countryId = countryId;
+    }
+
     public City() {
 
     }

@@ -16,6 +16,11 @@ public class Hotel {
     @Column("countryId")
     private int countryId;
 
+    public Hotel(String hotelName, int countryId) {
+        this.hotelName = hotelName;
+        this.countryId = countryId;
+    }
+
     public Hotel() {
 
     }
