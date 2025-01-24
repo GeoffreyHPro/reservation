@@ -13,20 +13,20 @@ public class Hotel {
     @Column("hotelName")
     private String hotelName;
 
-    @Column("countryId")
-    private int countryId;
+    @Column("cityId")
+    private int cityId;
 
-    public Hotel(String hotelName, int countryId) {
+    public Hotel(String hotelName, int cityId) {
         this.hotelName = hotelName;
-        this.countryId = countryId;
+        this.cityId = cityId;
     }
 
     public Hotel() {
 
     }
 
-    public int getCountryId() {
-        return countryId;
+    public int getCityId() {
+        return cityId;
     }
 
     public String getHotelName() {
@@ -37,8 +37,8 @@ public class Hotel {
         return id;
     }
 
-    public void setCountryId(int countryId) {
-        this.countryId = countryId;
+    public void setCityId(int cityId) {
+        this.cityId = cityId;
     }
 
     public void setHotelName(String hotelName) {
