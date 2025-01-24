@@ -23,15 +23,18 @@ public class CityRepositoryTest {
     @Autowired
     private CountryRepository countryRepository;
 
+    @Autowired
+    private Country country;
+
     @BeforeEach
     public void setUp(){
-        Country country = new Country("France");
+        this.country = new Country("France");
         this.countryRepository.save(country);
     }
 
     @Test
     public void testSaveCityAndFindById() {
-        City city = new City("Lille", 0);
+        City city = new City("Lille", this.country.getId());
 
         Mono<City> citySaved = cityRepository.save(city);
 
