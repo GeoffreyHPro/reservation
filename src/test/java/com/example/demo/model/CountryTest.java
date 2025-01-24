@@ -15,7 +15,7 @@ public class CountryTest {
     }
 
     @Test
-    public void testPriceSuccess() {
+    public void testCountryParameters() {
         this.country.setCountryName("France");
         assertEquals("France", this.country.getCountryName());
         this.country.setCountryName("England");
