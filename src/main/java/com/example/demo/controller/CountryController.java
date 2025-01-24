@@ -11,6 +11,10 @@ import com.example.demo.exception.NotFoundException;
 import com.example.demo.model.Country;
 import com.example.demo.service.CountryService;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -21,6 +25,10 @@ public class CountryController {
     private CountryService countryService;
 
     @GetMapping("/{id}")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "The country is successfully get", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Country.class))),
+            @ApiResponse(responseCode = "404", description = "The country is not found", content = @Content(mediaType = "application/json"))
+    })
     public Mono<ResponseEntity<Country>> getCity(@PathVariable int id) {
         return this.countryService.getCountry(id)
                 .map(country -> ResponseEntity.status(200).body(country))
