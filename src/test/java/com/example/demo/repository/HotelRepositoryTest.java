@@ -19,7 +19,7 @@ public class HotelRepositoryTest {
 
     @Test
     public void testSaveHotelAndFindById() {
-        Hotel hotel = new Hotel("Barriere", 1);
+        Hotel hotel = new Hotel("Barriere", 0);
 
         Mono<Hotel> hotelSaved = hotelRepository.save(hotel);
 

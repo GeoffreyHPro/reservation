@@ -3,11 +3,13 @@ package com.example.demo.repository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest;
 
 import com.example.demo.model.City;
+import com.example.demo.model.Country;
 
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
@@ -18,16 +20,25 @@ public class CityRepositoryTest {
     @Autowired
     private CityRepository cityRepository;
 
+    @Autowired
+    private CountryRepository countryRepository;
+
+    @BeforeEach
+    public void setUp(){
+        Country country = new Country("France");
+        this.countryRepository.save(country);
+    }
+
     @Test
     public void testSaveCityAndFindById() {
-        City city = new City("Lille", 1);
+        City city = new City("Lille", 0);
 
         Mono<City> citySaved = cityRepository.save(city);
 
         StepVerifier.create(citySaved)
                 .assertNext(saved -> {
                     assertEquals("Lille", saved.getCityName());
-                    assertEquals(1, saved.getCountryId());
+                    assertEquals(0, saved.getCountryId());
                     assertNotEquals(0, saved.getId());
                 }).verifyComplete();
 
