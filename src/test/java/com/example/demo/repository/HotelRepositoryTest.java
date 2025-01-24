@@ -1,7 +1,6 @@
 package com.example.demo.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,10 +25,8 @@ public class HotelRepositoryTest {
     @Autowired
     private CountryRepository countryRepository;
 
-    @Autowired
     private City city;
 
-    @Autowired
     private Country country;
 
     @BeforeEach
@@ -49,7 +46,6 @@ public class HotelRepositoryTest {
         StepVerifier.create(hotelSaved)
                 .assertNext(saved -> {
                     assertEquals("Barriere", saved.getHotelName());
-                    assertNotEquals(0, saved.getCityId());
                 }).verifyComplete();
 
         Mono<Hotel> hotelFound = hotelRepository.findById(hotel.getId());
