@@ -4,12 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.exception.AlreadyCreatedException;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.model.City;
 import com.example.demo.model.Country;
+import com.example.demo.request.CityRequest;
 import com.example.demo.service.CityService;
 
 import io.swagger.v3.oas.annotations.media.Content;
@@ -34,5 +38,16 @@ public class CityController {
         return this.cityService.getCity(id)
                 .map(country -> ResponseEntity.status(200).body(country))
                 .onErrorResume(NotFoundException.class, e -> Mono.just(ResponseEntity.status(404).build()));
+    }
+
+    @PostMapping()
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "The country is successfully created", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Country.class))),
+            @ApiResponse(responseCode = "400", description = "The country is already created")
+    })
+    public Mono<ResponseEntity<Object>> addCountry(@RequestBody CityRequest cityRequest) {
+        return this.cityService.addCity(cityRequest.getCityName(), cityRequest.getCountryId())
+                .map(country -> ResponseEntity.status(201).body(country))
+                .onErrorResume(AlreadyCreatedException.class, e -> Mono.just(ResponseEntity.status(400).build()));
     }
 }

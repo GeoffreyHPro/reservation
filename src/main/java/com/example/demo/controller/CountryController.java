@@ -26,37 +26,39 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/country")
 public class CountryController {
 
-    @Autowired
-    private CountryService countryService;
+        @Autowired
+        private CountryService countryService;
 
-    @GetMapping("/{id}")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "The country is successfully get", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Country.class))),
-            @ApiResponse(responseCode = "404", description = "The country is not found")
-    })
-    public Mono<ResponseEntity<Country>> getCountry(@PathVariable int id) {
-        return this.countryService.getCountry(id)
-                .map(country -> ResponseEntity.status(200).body(country))
-                .onErrorResume(NotFoundException.class, e -> Mono.just(ResponseEntity.status(404).build()));
-    }
+        @GetMapping("/{id}")
+        @ApiResponses({
+                        @ApiResponse(responseCode = "200", description = "The country is successfully get", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Country.class))),
+                        @ApiResponse(responseCode = "404", description = "The country is not found")
+        })
+        public Mono<ResponseEntity<Country>> getCountry(@PathVariable int id) {
+                return this.countryService.getCountry(id)
+                                .map(country -> ResponseEntity.status(200).body(country))
+                                .onErrorResume(NotFoundException.class,
+                                                e -> Mono.just(ResponseEntity.status(404).build()));
+        }
 
-    @PostMapping()
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "The country is successfully created", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Country.class))),
-            @ApiResponse(responseCode = "400", description = "The country is already created")
-    })
-    public Mono<ResponseEntity<Object>> addCountry(@RequestBody CountryRequest countryRequest) {
-        return this.countryService.addCountry(countryRequest.getCountryName())
-                .map(country -> ResponseEntity.status(201).body(country))
-                .onErrorResume(AlreadyCreatedException.class, e -> Mono.just(ResponseEntity.status(400).build()));
-    }
+        @PostMapping()
+        @ApiResponses({
+                        @ApiResponse(responseCode = "201", description = "The country is successfully created", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Country.class))),
+                        @ApiResponse(responseCode = "400", description = "The country is already created")
+        })
+        public Mono<ResponseEntity<Object>> addCountry(@RequestBody CountryRequest countryRequest) {
+                return this.countryService.addCountry(countryRequest.getCountryName())
+                                .map(country -> ResponseEntity.status(201).body(country))
+                                .onErrorResume(AlreadyCreatedException.class,
+                                                e -> Mono.just(ResponseEntity.status(400).build()));
+        }
 
-    @GetMapping()
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "The countries are successfully get", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Country.class)))
-    })
-    public Flux<Country> getAllCountries() {
-        return this.countryService.getAllCountries()
-                .map(listCountries -> listCountries);
-    }
+        @GetMapping()
+        @ApiResponses({
+                        @ApiResponse(responseCode = "200", description = "The countries are successfully get", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Country.class)))
+        })
+        public Flux<Country> getAllCountries() {
+                return this.countryService.getAllCountries()
+                                .map(listCountries -> listCountries);
+        }
 }
