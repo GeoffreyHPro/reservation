@@ -4,6 +4,8 @@ import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 
 import com.example.demo.model.City;
 
-public interface CityRepository extends ReactiveCrudRepository<City, Integer> {
+import reactor.core.publisher.Mono;
 
+public interface CityRepository extends ReactiveCrudRepository<City, Integer> {
+    Mono<City> findByCityName(String cityName);
 }
