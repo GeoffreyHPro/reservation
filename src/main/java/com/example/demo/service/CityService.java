@@ -7,6 +7,8 @@ import com.example.demo.exception.AlreadyCreatedException;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.model.City;
 import com.example.demo.repository.CityRepository;
+
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -30,5 +32,9 @@ public class CityService {
                     return Mono.error(new AlreadyCreatedException());
                 })
                 .switchIfEmpty(cityRepository.save(new City(cityName, CountryId)));
+    }
+
+    public Flux<City> getAllCities() {
+        return cityRepository.findAll();
     }
 }
