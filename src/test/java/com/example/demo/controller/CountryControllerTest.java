@@ -52,24 +52,23 @@ public class CountryControllerTest {
                 .exchange();
 
         assertEquals(201, response.returnResult(SliceImpl.class).getStatus().value());
-
     }
 
-    /*
-     * @Test
-     * public void testGetCountrySuccess() {
-     * Country country = new Country("France");
-     * 
-     * when(countryService.getCountry(1)).thenReturn(Mono.just(country));
-     * 
-     * webTestClient.get()
-     * .uri("/country/1")
-     * .exchange()
-     * .expectStatus().isOk()
-     * .expectBody(Country.class)
-     * .isEqualTo(new Country("France"));
-     * 
-     * Mockito.verify(countryRepository.save(country))
-     * }
-     */
+    @Test
+    public void testGetCountrySuccess() {
+        Country country = new Country("France");
+
+        when(countryRepository.findById(1)).thenReturn(Mono.just(country));
+        when(countryService.getCountry(1)).thenReturn(Mono.just(country));
+
+        webTestClient.get()
+                .uri("/country/1")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(Country.class)
+                .value(countryResponse -> {
+                    assertEquals("France", countryResponse.getCountryName());
+                });
+    }
+
 }
