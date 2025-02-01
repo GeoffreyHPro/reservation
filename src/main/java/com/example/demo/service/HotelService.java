@@ -8,6 +8,7 @@ import com.example.demo.exception.NotFoundException;
 import com.example.demo.model.Hotel;
 import com.example.demo.repository.HotelRepository;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -31,5 +32,9 @@ public class HotelService {
                     return Mono.error(new AlreadyCreatedException());
                 })
                 .switchIfEmpty(hotelRepository.save(new Hotel(hotelName, CityId)));
+    }
+
+    public Flux<Hotel> getAllHotels() {
+        return hotelRepository.findAll();
     }
 }
