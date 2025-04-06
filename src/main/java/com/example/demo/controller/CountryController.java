@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.exception.AlreadyCreatedException;
@@ -52,13 +53,15 @@ public class CountryController {
                                 .onErrorResume(AlreadyCreatedException.class,
                                                 e -> Mono.just(ResponseEntity.status(400).build()));
         }
-
+        
         @GetMapping()
         @ApiResponses({
                         @ApiResponse(responseCode = "200", description = "The countries are successfully get", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Country.class)))
         })
-        public Flux<Country> getAllCountries() {
-                return this.countryService.getAllCountries()
-                                .map(listCountries -> listCountries);
+        public Flux<Country> getCountriesByPage(
+                        @RequestParam(defaultValue = "") String name,
+                        @RequestParam(defaultValue = "0") int page,
+                        @RequestParam(defaultValue = "10") int size) {
+                return this.countryService.getCountries(name, page, size);
         }
 }

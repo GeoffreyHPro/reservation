@@ -37,4 +37,9 @@ public class CountryService {
     public Flux<Country> getAllCountries() {
         return countryRepository.findAll();
     }
+
+    public Flux<Country> getCountries(String name, int page, int size) {
+        int offset = page * size;
+        return countryRepository.findAllPaged(name, size, offset);
+    }
 }
